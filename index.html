@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Music Recommendation System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+
+  <div class="container">
+    <div class="neumorphic-panel">
+      <h1>MUSIC RECOMMENDATION SYSTEM</h1>
+      <div class="spotify-logo"><img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo"></div>
+      <p class="tagline">Discover new music tailored to your taste</p>
+      <button class="btn"><a href="/authorization">Get Recommendations</a></button>
+    </div>
+  </div>
+
+</body>
+</html>
