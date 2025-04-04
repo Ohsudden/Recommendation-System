@@ -16,7 +16,7 @@ class SpotifyFlaskApp:
         self.client_id = '35b9e497c11d4762a1c0e8079c35471e'
         self.client_secret = 'e3ade5f52df24d8ab14ded88cea867c3'
         self.redirect_uri = 'http://localhost:5000/callback'
-        self.scope = 'user-library-read'
+        self.scope='user-library-read user-top-read',
         
         self.cache_handler = FlaskSessionCacheHandler(session)
         self.sp_oauth = SpotifyOAuth(
@@ -31,7 +31,6 @@ class SpotifyFlaskApp:
         self.register_routes()
     
     def register_routes(self):
-        """Register all route handlers with the Flask app."""
         self.app.route('/', endpoint='home')(self.home)
         self.app.route('/authorization', endpoint='authorize')(self.authorize)
         self.app.route('/playlists-data', endpoint='playlists_data')(self.playlists_data)
@@ -40,14 +39,12 @@ class SpotifyFlaskApp:
         self.app.route('/liked-tracks-data', endpoint='liked_tracks_data')(self.liked_tracks_data)
         self.app.route('/recommend/<playlist_id>', endpoint='recommend')(self.recommend)
         self.app.route('/recommend-by-recent-songs/', endpoint='recommend_by_recent_songs')(self.recommend_by_recent_songs)
-
+        self.app.route('/top-tracks', endpoint='top_tracks')(self.top_tracks)
     
     def home(self):
-        """Render the home page."""
         return render_template('index.html')
     
     def authorize(self):
-        """Authorize the user with Spotify."""
         token_info = self.cache_handler.get_cached_token()
         if not self.sp_oauth.validate_token(token_info):
             auth_url = self.sp_oauth.get_authorize_url()
@@ -56,7 +53,6 @@ class SpotifyFlaskApp:
             return redirect(url_for('dashboard'))
     
     def playlists_data(self):
-        """Return user's playlists as JSON."""
         token_info = self.cache_handler.get_cached_token()
         if not token_info:
             return redirect(url_for('home'))
@@ -74,13 +70,11 @@ class SpotifyFlaskApp:
         return jsonify(playlist_data)
     
     def callback(self):
-        """Handle the callback from Spotify OAuth."""
         code = request.args.get('code')
         self.sp_oauth.get_access_token(code, as_dict=False)
         return redirect(url_for('dashboard'))
     
     def dashboard(self):
-        """Render the dashboard page."""
         token_info = self.cache_handler.get_cached_token()
         if not token_info:
             return redirect(url_for('home'))
@@ -92,7 +86,6 @@ class SpotifyFlaskApp:
                               playlists=playlists['items'])
     
     def liked_tracks_data(self):
-        """Return user's liked tracks as JSON."""
         token_info = self.cache_handler.get_cached_token()
         if not token_info:
             return redirect(url_for('home'))
@@ -112,10 +105,7 @@ class SpotifyFlaskApp:
         return jsonify(tracks_data)
     
     def recommend(self, playlist_id, option='playlist'):
-        """
-        Flask route that calls the recommend() function with the playlist id
-        and returns the recommendations as JSON.
-        """
+
         token_info = self.cache_handler.get_cached_token()
         
         if not token_info:
@@ -148,8 +138,15 @@ class SpotifyFlaskApp:
         except Exception as e:
             return jsonify({"error": f"Error processing recommendations: {str(e)}"})
             
+    def top_tracks(self):
+        token_info = self.cache_handler.get_cached_token()
+        if not token_info or not self.sp_oauth.validate_token(token_info):
+            return jsonify({"error": "Not authorized"}), 401
+
+        current_user_top_tracks = self.sp.current_user_top_tracks(limit=5, time_range='medium_term')
+        return jsonify(current_user_top_tracks)
+    
     def run(self, debug=True):
-        """Run the Flask application."""
         self.app.run(debug=debug)
 
 

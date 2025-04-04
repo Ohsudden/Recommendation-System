@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+    height: 100%;
+}
+
+
+.title-tag {
+    font-size: 2.5em;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    color: #1DB954;
+    width: 100%;
+}
+
+
+
+.btn {
+    display: inline-block;
+    background: #1DB954;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    margin-top: 15px;
+}
+
+.btn:hover {
+    background: #1ED760;
+}
+
+#playlists-container {
+    display: none;
+    margin-top: 30px;
+}
+
+.playlist-item {
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #181818;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    color: #1DB954;
+    cursor: pointer;
+}
+#playlists-container,
+#liked-songs-container,
+#recommendations-container {
+  display: none;
+  margin-top: 30px;
+}
+
+#top-tracks-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    flex-wrap: nowrap;
+    width: 120%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.music-item {
+    background-color: #181818;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: calc(20% - 16px);
+    margin: 0 8px; 
+}
+
+.music-item .cover {
+    width: 100%;
+    padding-top: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.music-item .track-info {
+    padding: 10px;
+}
+
+.music-item .track-name {
+    font-size: 1em;
+    margin: 5px 0;
+    color: #fff;
+}
+
+.music-item .track-artist {
+    font-size: 0.8em;
+    color: #b3b3b3;
+}
