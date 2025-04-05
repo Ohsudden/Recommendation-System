@@ -40,6 +40,8 @@ class SpotifyFlaskApp:
         self.app.route('/recommend/<playlist_id>', endpoint='recommend')(self.recommend)
         self.app.route('/recommend-by-recent-songs/', endpoint='recommend_by_recent_songs')(self.recommend_by_recent_songs)
         self.app.route('/top-tracks', endpoint='top_tracks')(self.top_tracks)
+        self.app.route('/top-artists', endpoint='top_artists')(self.get_top_artists)
+        self.app.route('/top-genres', endpoint='top_genres')(self.get_top_genres)
     
     def home(self):
         return render_template('index.html')
@@ -145,6 +147,33 @@ class SpotifyFlaskApp:
 
         current_user_top_tracks = self.sp.current_user_top_tracks(limit=5, time_range='medium_term')
         return jsonify(current_user_top_tracks)
+    
+    def get_top_artists(self):
+        token_info = self.cache_handler.get_cached_token()
+        if not token_info or not self.sp_oauth.validate_token(token_info):
+            return jsonify({"error": "Not authorized"}), 401
+
+        current_user_top_artists = self.sp.current_user_top_artists(limit=5, time_range='medium_term')
+        return jsonify(current_user_top_artists)
+    
+    def get_top_genres(self):
+        token_info = self.cache_handler.get_cached_token()
+        if not token_info or not self.sp_oauth.validate_token(token_info):
+            return jsonify({"error": "Not authorized"}), 401
+
+        current_user_top_genres = self.sp.current_user_top_artists(limit=50, time_range='medium_term')
+        genres = [genre for artist in current_user_top_genres['items'] for genre in artist.get('genres', [])]
+
+        genre_freq = {}
+        for genre in genres:
+            genre_freq[genre] = genre_freq.get(genre, 0) + 1
+
+        sorted_genres = sorted(genre_freq.items(), key=lambda x: x[1], reverse=True)
+        filtered_genres = [item for item in sorted_genres if item[1] > 1]
+        top_5_with_counts = filtered_genres[:5]
+        top_5_genres = [genre for genre, count in top_5_with_counts]
+
+        return jsonify(top_5_genres)
     
     def run(self, debug=True):
         self.app.run(debug=debug)

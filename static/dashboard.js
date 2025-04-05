@@ -195,3 +195,71 @@ document.getElementById('back-from-recommendations').addEventListener('click', f
     document.getElementById('recommendations-container').style.display = 'none';
     document.getElementById('main-options').style.display = 'flex';
 });
+
+function getTopArtists() {
+    fetch('/top-artists')
+        .then(response => response.json())
+        .then(data => {
+            const artists = data.items;
+            const topArtistsList = document.getElementById('top-artists-list');
+            topArtistsList.innerHTML = '';
+            
+            if (Array.isArray(artists)) {
+                artists.forEach(artist => {
+                    const artistItem = document.createElement('div');
+                    artistItem.className = 'music-item';
+                    const imageUrl = (artist.images && artist.images.length > 0)
+                                     ? artist.images[0].url
+                                     : 'https://via.placeholder.com/150';
+                    artistItem.innerHTML = `
+                        <div class="cover" style="background-image: url('${imageUrl}');"></div>
+                        <div class="artist-info">
+                            <div class="artist-name">${artist.name}</div>
+                        </div>
+                    `;
+                    topArtistsList.appendChild(artistItem);
+                });
+            } else {
+                topArtistsList.innerHTML = '<p>No top artists found.</p>';
+            }
+        })
+        .catch(error => {
+            document.getElementById('top-artists-list').innerHTML = `<p>Error loading top artists: ${error.message}</p>`;
+        });
+}
+document.addEventListener('DOMContentLoaded', function() {
+    getTopArtists();
+});
+
+function getTopGenre() {
+    fetch('/top-genres')
+        .then(response => response.json())
+        .then(data => {
+            const genresList = document.getElementById('top-genres-list');
+            genresList.innerHTML = '';
+
+            if (data.message) {
+                genresList.innerHTML = `<p>${data.message}</p>`;
+                return;
+            }
+            
+            if (Array.isArray(data)) {
+                data.forEach(genre => {
+                    const genreItem = document.createElement('div');
+                    genreItem.className = 'genre-item';
+                    genreItem.innerHTML = `<div>${genre}</div>`;
+                    genresList.appendChild(genreItem);
+                });
+            } else {
+                genresList.innerHTML = '<p>No top genres found.</p>';
+            }
+        })
+        .catch(error => {
+            document.getElementById('top-genres-list').innerHTML = `<p>Error loading top genres: ${error.message}</p>`;
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    getTopGenre();
+});
+
