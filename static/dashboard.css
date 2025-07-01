@@ -79,7 +79,7 @@ body {
     overflow: hidden;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    width: calc(20% - 16px);
+    width: calc(40% - 16px);
     margin: 0 8px; 
 }
 

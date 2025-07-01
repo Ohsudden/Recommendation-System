@@ -5,19 +5,25 @@ from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import FlaskSessionCacheHandler
 from analysis_function import AudioProcessor
 from datetime import timedelta
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from dotenv import load_dotenv
+
+
+
+load_dotenv() 
 
 class SpotifyFlaskApp:
-    
     def __init__(self):
         self.app = Flask(__name__, template_folder='C:/Users/vova2/PycharmProjects/SpotifyMusic')
         self.app.config['SECRET_KEY'] = os.urandom(64)
         self.app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)
         self.app.config['SESSION_PERMANENT'] = True
-        self.client_id = '35b9e497c11d4762a1c0e8079c35471e'
-        self.client_secret = 'e3ade5f52df24d8ab14ded88cea867c3'
-        self.redirect_uri = 'http://localhost:5000/callback'
-        self.scope='user-library-read user-top-read',
-        
+        self.client_id = os.getenv('SPOTIFY_CLIENT_ID')
+        self.client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
+        self.redirect_uri = os.getenv('SPOTIFY_REDIRECT_URI')
+        self.scope = 'user-library-read user-top-read'
+
         self.cache_handler = FlaskSessionCacheHandler(session)
         self.sp_oauth = SpotifyOAuth(
             client_id=self.client_id,
@@ -27,8 +33,37 @@ class SpotifyFlaskApp:
             cache_handler=self.cache_handler
         )
         self.sp = Spotify(auth_manager=self.sp_oauth)
-        
+
         self.register_routes()
+    
+    def chat_api(self):
+        user_message = request.json.get("message")
+        if not user_message:
+            return jsonify({"error": "No message provided"}), 400
+
+        llm = ChatOpenAI(
+            model="gpt-4o-mini",
+            temperature=0,
+            max_tokens=500,
+            timeout=None,
+            max_retries=2,
+            openai_api_key=os.getenv("OPENAI_API_KEY")
+        )
+        # Make the system prompt specific to your app:
+        prompt = ChatPromptTemplate.from_messages([
+            ("system",
+            "You are a helpful assistant for a Spotify music recommendation web app. "
+            "Answer ONLY about features available in this app. "
+            "The user can: view their top tracks, top artists, top genres, playlists, liked songs, "
+            "and get recommendations based on their playlists or liked songs. "
+            "If the user asks how to get recommendations, explain how to use the app's buttons and features. "
+            "Do NOT give generic internet advice or mention other services."),
+            ("user", "{input}")
+        ])
+        chain = prompt | llm
+
+        response = chain.invoke({"input": user_message})
+        return jsonify({"response": response.content})
     
     def register_routes(self):
         self.app.route('/', endpoint='home')(self.home)
@@ -42,7 +77,8 @@ class SpotifyFlaskApp:
         self.app.route('/top-tracks', endpoint='top_tracks')(self.top_tracks)
         self.app.route('/top-artists', endpoint='top_artists')(self.get_top_artists)
         self.app.route('/top-genres', endpoint='top_genres')(self.get_top_genres)
-    
+        self.app.add_url_rule('/chat-api', view_func=self.chat_api, methods=['POST'])
+
     def home(self):
         return render_template('index.html')
     
@@ -145,7 +181,7 @@ class SpotifyFlaskApp:
         if not token_info or not self.sp_oauth.validate_token(token_info):
             return jsonify({"error": "Not authorized"}), 401
 
-        current_user_top_tracks = self.sp.current_user_top_tracks(limit=5, time_range='medium_term')
+        current_user_top_tracks = self.sp.current_user_top_tracks(limit=3, time_range='medium_term')
         return jsonify(current_user_top_tracks)
     
     def get_top_artists(self):
@@ -153,7 +189,7 @@ class SpotifyFlaskApp:
         if not token_info or not self.sp_oauth.validate_token(token_info):
             return jsonify({"error": "Not authorized"}), 401
 
-        current_user_top_artists = self.sp.current_user_top_artists(limit=5, time_range='medium_term')
+        current_user_top_artists = self.sp.current_user_top_artists(limit=3, time_range='medium_term')
         return jsonify(current_user_top_artists)
     
     def get_top_genres(self):

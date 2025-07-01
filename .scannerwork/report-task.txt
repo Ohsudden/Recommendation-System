@@ -1,0 +1,6 @@
+projectKey=Recommendation_system
+serverUrl=http://localhost:9000
+serverVersion=25.3.0.104237
+dashboardUrl=http://localhost:9000/dashboard?id=Recommendation_system
+ceTaskId=9f78964d-1314-48f7-b976-742e94234676
+ceTaskUrl=http://localhost:9000/api/ce/task?id=9f78964d-1314-48f7-b976-742e94234676

@@ -247,7 +247,7 @@ class DatasetProcessor:
     def parse_array(value):
         if isinstance(value, (list, np.ndarray)):
             return list(value)
-        if isinstance(value, str):
+        if isinstance(value, str):  
             cleaned_str = value.replace("\n", " ").strip()
             number_strings = re.findall(r'-?\d+\.?\d*(?:e[+-]?\d+)?', cleaned_str)
             return [float(num) for num in number_strings]

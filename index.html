@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Music Recommendation System</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
 </head>
 <body>
 
@@ -16,5 +17,26 @@
     </div>
   </div>
 
+<div id="chatbot-container">
+    <button id="open-chatbot" class="chatbot-round-btn" aria-label="Open chat">
+        <img src="{{ url_for('static', filename='chat.png') }}" alt="Chat" class="chatbot-icon">
+    </button>
+    <div id="chatbot-window">
+        <div id="chatbot-messages">
+            <div class="chatbot-message chatbot-message-bot">
+                <img class="chatbot-avatar" src="{{ url_for('static', filename='bot_avatar.png') }}" alt="Bot">
+                <div class="chatbot-bubble">
+                    <div class="chatbot-nickname">Bot</div> 👋 Welcome! If you have any questions about your music recommendations or using this app, just ask me here.
+                </div>
+            </div>
+        </div>
+        <form id="chatbot-form">
+            <input id="chatbot-input" type="text" placeholder="Type your message...">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='chatbot.js') }}"></script>
 </body>
 </html>

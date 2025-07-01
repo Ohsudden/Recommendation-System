@@ -1,24 +1,24 @@
 function getRecommendations(playlistId) {
-    document.getElementById('playlists-container').style.display = 'none';
-    document.getElementById('recommendations-container').style.display = 'block';
-    document.getElementById('recommendations-list').innerHTML = '<p>Loading recommendations...</p>';
+    document.getElementById("playlists-container").style.display = "none";
+    document.getElementById("recommendations-container").style.display = "block";
+    document.getElementById("recommendations-list").innerHTML = "<p>Loading recommendations...</p>";
     
     fetch(`/recommend/${playlistId}`)
         .then(response => response.json())
         .then(recommendations => {
             console.log("Recommendations:", recommendations);
-            const recommendationsList = document.getElementById('recommendations-list');
-            recommendationsList.innerHTML = '';
+            const recommendationsList = document.getElementById("recommendations-list");
+            recommendationsList.innerHTML = "";
             if (recommendations.error) {
                 recommendationsList.innerHTML = `<p>Error: ${recommendations.error}</p>`;
                 return;
-            }
+            }   
             if (Array.isArray(recommendations) && recommendations.length > 0) {
                 recommendations.forEach(rec => {
                     const trackId = rec.track_id;
                     const similarity = rec.similarity;
-                    const recItem = document.createElement('div');
-                    recItem.className = 'recommendation-item';
+                    const recItem = document.createElement("div");
+                    recItem.className = "recommendation-item";
                     recItem.innerHTML = `
                         <p>Similarity score: ${(similarity * 100).toFixed(2)}%</p>
                         <iframe 
@@ -35,26 +35,26 @@ function getRecommendations(playlistId) {
                     recommendationsList.appendChild(recItem);
                 });
             } else {
-                recommendationsList.innerHTML = '<p>No recommendations found.</p>';
+                recommendationsList.innerHTML = "<p>No recommendations found.</p>";
             }
         })
         .catch(error => {
             console.error("Error fetching recommendations:", error);
-            document.getElementById('recommendations-list').innerHTML = `<p>Error loading recommendations: ${error.message}</p>`;
+            document.getElementById("recommendations-list").innerHTML = `<p>Error loading recommendations: ${error.message}</p>`;
         });
 }
 
 function getLikedRecommendations() {
-    document.getElementById('liked-songs-container').style.display = 'none';
-    document.getElementById('recommendations-container').style.display = 'block';
-    document.getElementById('recommendations-list').innerHTML = '<p>Loading recommendations...</p>';
+    document.getElementById("liked-songs-container").style.display = "none";
+    document.getElementById("recommendations-container").style.display = "block";
+    document.getElementById("recommendations-list").innerHTML = "<p>Loading recommendations...</p>";
 
-    fetch(`/recommend-by-recent-songs/`)
+    fetch("/recommend-by-recent-songs/")
         .then(response => response.json())
         .then(recommendations => {
             console.log("Liked Recommendations:", recommendations);
-            const recommendationsList = document.getElementById('recommendations-list');
-            recommendationsList.innerHTML = '';
+            const recommendationsList = document.getElementById("recommendations-list");
+            recommendationsList.innerHTML = "";
             if (recommendations.error) {
                 recommendationsList.innerHTML = `<p>Error: ${recommendations.error}</p>`;
                 return;
@@ -63,8 +63,8 @@ function getLikedRecommendations() {
                 recommendations.forEach(rec => {
                     const trackId = rec.track_id;
                     const similarity = rec.similarity;
-                    const recItem = document.createElement('div');
-                    recItem.className = 'recommendation-item';
+                    const recItem = document.createElement("div");
+                    recItem.className = "recommendation-item";
                     recItem.innerHTML = `
                         <p>Similarity score: ${(similarity * 100).toFixed(2)}%</p>
                         <iframe 
@@ -81,28 +81,28 @@ function getLikedRecommendations() {
                     recommendationsList.appendChild(recItem);
                 });
             } else {
-                recommendationsList.innerHTML = '<p>No recommendations found.</p>';
+                recommendationsList.innerHTML = "<p>No recommendations found.</p>";
             }
         })
         .catch(error => {
             console.error("Error fetching liked recommendations:", error);
-            document.getElementById('recommendations-list').innerHTML = `<p>Error loading recommendations: ${error.message}</p>`;
+            document.getElementById("recommendations-list").innerHTML = `<p>Error loading recommendations: ${error.message}</p>`;
         });
 }
 
-document.getElementById('show-playlists').addEventListener('click', function() {
-    document.getElementById('main-options').style.display = 'none';
-    document.getElementById('playlists-container').style.display = 'block';
+document.getElementById("show-playlists").addEventListener("click", () => {
+    document.getElementById("main-options").style.display = "none";
+    document.getElementById("playlists-container").style.display = "block";
 
-    fetch('/playlists-data')
+    fetch("/playlists-data")
         .then(response => response.json())
         .then(playlists => {
-            const playlistsList = document.getElementById('playlists-list');
-            playlistsList.innerHTML = '';
+            const playlistsList = document.getElementById("playlists-list");
+            playlistsList.innerHTML = "";
 
             playlists.forEach(playlist => {
-                const playlistItem = document.createElement('div');
-                playlistItem.className = 'playlist-item';
+                const playlistItem = document.createElement("div");
+                playlistItem.className = "playlist-item";
                 playlistItem.innerHTML = `
                     <div>${playlist.name}</div>
                     <button class="btn" onclick="getRecommendations('${playlist.id}')">
@@ -113,23 +113,23 @@ document.getElementById('show-playlists').addEventListener('click', function() {
             });
         })
         .catch(error => {
-            document.getElementById('playlists-list').innerHTML = `<p>Error loading playlists: ${error.message}</p>`;
+            document.getElementById("playlists-list").innerHTML = `<p>Error loading playlists: ${error.message}</p>`;
         });
 });
 
-document.getElementById('show-liked-songs').addEventListener('click', function() {
-    document.getElementById('main-options').style.display = 'none';
-    document.getElementById('liked-songs-container').style.display = 'block';
+document.getElementById("show-liked-songs").addEventListener("click", () => {
+    document.getElementById("main-options").style.display = "none";
+    document.getElementById("liked-songs-container").style.display = "block";
     
-    fetch('/liked-tracks-data')
+    fetch("/liked-tracks-data")
         .then(response => response.json())
         .then(tracks => {
-            const likedSongsList = document.getElementById('liked-songs-list');
-            likedSongsList.innerHTML = '';
+            const likedSongsList = document.getElementById("liked-songs-list");
+            likedSongsList.innerHTML = "";
             
             tracks.forEach(track => {
-                const trackItem = document.createElement('div');
-                trackItem.className = 'playlist-item';
+                const trackItem = document.createElement("div");
+                trackItem.className = "playlist-item";
                 trackItem.innerHTML = `
                     <div>${track.name}</div>
                     <div><small>by ${track.artists}</small></div>
@@ -138,79 +138,79 @@ document.getElementById('show-liked-songs').addEventListener('click', function()
             });
         })
         .catch(error => {
-            document.getElementById('liked-songs-list').innerHTML = `<p>Error loading liked songs: ${error.message}</p>`;
+            document.getElementById("liked-songs-list").innerHTML = `<p>Error loading liked songs: ${error.message}</p>`;
         });
 });
 function getTopTracks() {
-    fetch('/top-tracks')
+    fetch("/top-tracks")
         .then(response => response.json())
         .then(data => {
             const tracks = data.items;
-            const topTracksList = document.getElementById('top-tracks-list');
-            topTracksList.innerHTML = '';
+            const topTracksList = document.getElementById("top-tracks-list");
+            topTracksList.innerHTML = "";
             
             if (Array.isArray(tracks)) {
                 tracks.forEach(track => {
-                    const trackItem = document.createElement('div');
-                    trackItem.className = 'music-item';
+                    const trackItem = document.createElement("div");
+                    trackItem.className = "music-item";
                     const imageUrl = (track.album && track.album.images && track.album.images.length > 0)
                                      ? track.album.images[0].url
-                                     : 'https://via.placeholder.com/150';
+                                     : "https://via.placeholder.com/150";
                     trackItem.innerHTML = `
                         <div class="cover" style="background-image: url('${imageUrl}');"></div>
                         <div class="track-info">
                             <div class="track-name">${track.name}</div>
-                            <div class="track-artist"><small>by ${track.artists.map(artist => artist.name).join(', ')}</small></div>
+                            <div class="track-artist"><small>by ${track.artists.map(artist => artist.name).join(", ")}</small></div>
                         </div>
                     `;
                     topTracksList.appendChild(trackItem);
                 });
             } else {
-                topTracksList.innerHTML = '<p>No top tracks found.</p>';
+                topTracksList.innerHTML = "<p>No top tracks found.</p>";
             }
         })
         .catch(error => {
-            document.getElementById('top-tracks-list').innerHTML = `<p>Error loading top tracks: ${error.message}</p>`;
+            document.getElementById("top-tracks-list").innerHTML = `<p>Error loading top tracks: ${error.message}</p>`;
         });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
     getTopTracks();
 });
-document.getElementById('get-liked-recommendations').addEventListener('click', function() {
+document.getElementById("get-liked-recommendations").addEventListener("click", () => {
     getLikedRecommendations();
 });
 
-document.getElementById('back-from-playlists').addEventListener('click', function() {
-    document.getElementById('playlists-container').style.display = 'none';
-    document.getElementById('main-options').style.display = 'flex';
+document.getElementById("back-from-playlists").addEventListener("click", () => {
+    document.getElementById("playlists-container").style.display = "none";
+    document.getElementById("main-options").style.display = "flex";
 });
 
-document.getElementById('back-from-liked-songs').addEventListener('click', function() {
-    document.getElementById('liked-songs-container').style.display = 'none';
-    document.getElementById('main-options').style.display = 'flex';
+document.getElementById("back-from-liked-songs").addEventListener("click", () => {
+    document.getElementById("liked-songs-container").style.display = "none";
+    document.getElementById("main-options").style.display = "flex";
 });
 
-document.getElementById('back-from-recommendations').addEventListener('click', function() {
-    document.getElementById('recommendations-container').style.display = 'none';
-    document.getElementById('main-options').style.display = 'flex';
+document.getElementById("back-from-recommendations").addEventListener("click", () => {
+    document.getElementById("recommendations-container").style.display = "none";
+    document.getElementById("main-options").style.display = "flex";
 });
 
 function getTopArtists() {
-    fetch('/top-artists')
+    fetch("/top-artists")
         .then(response => response.json())
         .then(data => {
             const artists = data.items;
-            const topArtistsList = document.getElementById('top-artists-list');
-            topArtistsList.innerHTML = '';
+            const topArtistsList = document.getElementById("top-artists-list");
+            topArtistsList.innerHTML = "";
             
             if (Array.isArray(artists)) {
                 artists.forEach(artist => {
-                    const artistItem = document.createElement('div');
-                    artistItem.className = 'music-item';
+                    const artistItem = document.createElement("div");
+                    artistItem.className = "music-item";
                     const imageUrl = (artist.images && artist.images.length > 0)
                                      ? artist.images[0].url
-                                     : 'https://via.placeholder.com/150';
+                                     : "https://via.placeholder.com/150";
                     artistItem.innerHTML = `
                         <div class="cover" style="background-image: url('${imageUrl}');"></div>
                         <div class="artist-info">
@@ -220,23 +220,23 @@ function getTopArtists() {
                     topArtistsList.appendChild(artistItem);
                 });
             } else {
-                topArtistsList.innerHTML = '<p>No top artists found.</p>';
+                topArtistsList.innerHTML = "<p>No top artists found.</p>";
             }
         })
         .catch(error => {
-            document.getElementById('top-artists-list').innerHTML = `<p>Error loading top artists: ${error.message}</p>`;
+            document.getElementById("top-artists-list").innerHTML = `<p>Error loading top artists: ${error.message}</p>`;
         });
 }
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", () => {
     getTopArtists();
 });
 
 function getTopGenre() {
-    fetch('/top-genres')
+    fetch("/top-genres")
         .then(response => response.json())
         .then(data => {
-            const genresList = document.getElementById('top-genres-list');
-            genresList.innerHTML = '';
+            const genresList = document.getElementById("top-genres-list");
+            genresList.innerHTML = "";
 
             if (data.message) {
                 genresList.innerHTML = `<p>${data.message}</p>`;
@@ -245,21 +245,21 @@ function getTopGenre() {
             
             if (Array.isArray(data)) {
                 data.forEach(genre => {
-                    const genreItem = document.createElement('div');
-                    genreItem.className = 'genre-item';
+                    const genreItem = document.createElement("div");
+                    genreItem.className = "genre-item";
                     genreItem.innerHTML = `<div>${genre}</div>`;
                     genresList.appendChild(genreItem);
                 });
             } else {
-                genresList.innerHTML = '<p>No top genres found.</p>';
+                genresList.innerHTML = "<p>No top genres found.</p>";
             }
         })
         .catch(error => {
-            document.getElementById('top-genres-list').innerHTML = `<p>Error loading top genres: ${error.message}</p>`;
+            document.getElementById("top-genres-list").innerHTML = `<p>Error loading top genres: ${error.message}</p>`;
         });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", () => {
     getTopGenre();
 });
 
