@@ -3,6 +3,7 @@ import numpy as np
 import soundfile as sf
 from analysis_function import AudioProcessor
 
+
 class TestAudioProcessor(unittest.TestCase):
 
     def setUp(self):
@@ -22,6 +23,7 @@ class TestAudioProcessor(unittest.TestCase):
     def test_extract_features_file_not_found(self):
         with self.assertRaises(Exception):
             self.audio_proc.extract_audio_features('nonexistent.mp3')
+
 
 if __name__ == '__main__':
     unittest.main()

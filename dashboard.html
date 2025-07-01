@@ -9,57 +9,57 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
 </head>
 <body>
-    <h1 class="title-tag">Spotify Recommendations Dashboard</h1>
+<h1 class="title-tag">Spotify Recommendations Dashboard</h1>
 
-    <div id = 'top-tracks'>
-        <h2>Your Top Tracks</h2>
-        <div id="top-tracks-list"></div>
-    </div>
+<div id='top-tracks'>
+    <h2>Your Top Tracks</h2>
+    <div id="top-tracks-list"></div>
+</div>
 
-    <div id = 'top-artists'>
-        <h2>Your Top Artists</h2>
-        <div id="top-artists-list"></div>
-    </div>
+<div id='top-artists'>
+    <h2>Your Top Artists</h2>
+    <div id="top-artists-list"></div>
+</div>
 
-    <div id = 'top-genres'>
-        <h2>Your Top Genres</h2>
-        <div id="top-genres-list"></div>
-    </div>
-    
-    <div id="main-options" class="options">
-        <div id="playlists-option" class="option">
-            <h2>Your Playlists</h2>
-            <p>Get recommendations based on tracks in your playlists</p>
-            <button id="show-playlists" class="btn">View Playlists</button>
-        </div>
-        <div id="liked-songs-option" class="option">
-            <h2>Liked Songs</h2>
-            <p>Get recommendations based on your liked songs</p>
-            <button id="show-liked-songs" class="btn">View Liked Songs</button>
-        </div>
-    </div>
-    
-    <div id="playlists-container">
+<div id='top-genres'>
+    <h2>Your Top Genres</h2>
+    <div id="top-genres-list"></div>
+</div>
+
+<div id="main-options" class="options">
+    <div id="playlists-option" class="option">
         <h2>Your Playlists</h2>
-        <div id="playlists-list">
-        </div>
-        <div class="back-btn" id="back-from-playlists">← Back to Options</div>
+        <p>Get recommendations based on tracks in your playlists</p>
+        <button id="show-playlists" class="btn">View Playlists</button>
     </div>
-    
-    <div id="liked-songs-container">
-        <h2>Your Liked Songs</h2>
-        <div id="liked-songs-list"></div>
-        <button id="get-liked-recommendations" class="btn">Get Liked Recommendations</button>
-        <div class="back-btn" id="back-from-liked-songs">← Back to Options</div>
-      </div>
-
-    <div id="recommendations-container">
-        <h2>Your Recommendations</h2>
-        <div id="recommendations-list"></div>
-        <div class="back-btn" id="back-from-recommendations">← Back to Options</div>
+    <div id="liked-songs-option" class="option">
+        <h2>Liked Songs</h2>
+        <p>Get recommendations based on your liked songs</p>
+        <button id="show-liked-songs" class="btn">View Liked Songs</button>
     </div>
+</div>
 
-    <div id="chatbot-container">
+<div id="playlists-container">
+    <h2>Your Playlists</h2>
+    <div id="playlists-list">
+    </div>
+    <div class="back-btn" id="back-from-playlists">← Back to Options</div>
+</div>
+
+<div id="liked-songs-container">
+    <h2>Your Liked Songs</h2>
+    <div id="liked-songs-list"></div>
+    <button id="get-liked-recommendations" class="btn">Get Liked Recommendations</button>
+    <div class="back-btn" id="back-from-liked-songs">← Back to Options</div>
+</div>
+
+<div id="recommendations-container">
+    <h2>Your Recommendations</h2>
+    <div id="recommendations-list"></div>
+    <div class="back-btn" id="back-from-recommendations">← Back to Options</div>
+</div>
+
+<div id="chatbot-container">
     <button id="open-chatbot" class="chatbot-round-btn" aria-label="Open chat">
         <img src="{{ url_for('static', filename='chat.png') }}" alt="Chat" class="chatbot-icon">
     </button>
@@ -68,7 +68,9 @@
             <div class="chatbot-message chatbot-message-bot">
                 <img class="chatbot-avatar" src="{{ url_for('static', filename='bot_avatar.png') }}" alt="Bot">
                 <div class="chatbot-bubble">
-                    <div class="chatbot-nickname">Bot</div> 👋 Welcome! If you have any questions about your music recommendations or using this app, just ask me here.
+                    <div class="chatbot-nickname">Bot</div>
+                    👋 Welcome! If you have any questions about your music recommendations or using this app, just ask me
+                    here.
                 </div>
             </div>
         </div>
@@ -80,7 +82,7 @@
 </div>
 
 </div>
-    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
-    <script src="{{ url_for('static', filename='chatbot.js') }}"></script>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='chatbot.js') }}"></script>
 </body>
 </html>

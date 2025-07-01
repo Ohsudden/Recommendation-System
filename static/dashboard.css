@@ -20,7 +20,6 @@ body {
 }
 
 
-
 .btn {
     display: inline-block;
     background: #1DB954;
@@ -54,11 +53,12 @@ body {
     color: #1DB954;
     cursor: pointer;
 }
+
 #playlists-container,
 #liked-songs-container,
 #recommendations-container {
-  display: none;
-  margin-top: 30px;
+    display: none;
+    margin-top: 30px;
 }
 
 #top-tracks-list, #top-artists-list, #top-genres-list {
@@ -80,7 +80,7 @@ body {
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     width: calc(40% - 16px);
-    margin: 0 8px; 
+    margin: 0 8px;
 }
 
 .music-item .cover, .artist-item .cover {

@@ -2,7 +2,7 @@ function getRecommendations(playlistId) {
     document.getElementById("playlists-container").style.display = "none";
     document.getElementById("recommendations-container").style.display = "block";
     document.getElementById("recommendations-list").innerHTML = "<p>Loading recommendations...</p>";
-    
+
     fetch(`/recommend/${playlistId}`)
         .then(response => response.json())
         .then(recommendations => {
@@ -12,7 +12,7 @@ function getRecommendations(playlistId) {
             if (recommendations.error) {
                 recommendationsList.innerHTML = `<p>Error: ${recommendations.error}</p>`;
                 return;
-            }   
+            }
             if (Array.isArray(recommendations) && recommendations.length > 0) {
                 recommendations.forEach(rec => {
                     const trackId = rec.track_id;
@@ -120,13 +120,13 @@ document.getElementById("show-playlists").addEventListener("click", () => {
 document.getElementById("show-liked-songs").addEventListener("click", () => {
     document.getElementById("main-options").style.display = "none";
     document.getElementById("liked-songs-container").style.display = "block";
-    
+
     fetch("/liked-tracks-data")
         .then(response => response.json())
         .then(tracks => {
             const likedSongsList = document.getElementById("liked-songs-list");
             likedSongsList.innerHTML = "";
-            
+
             tracks.forEach(track => {
                 const trackItem = document.createElement("div");
                 trackItem.className = "playlist-item";
@@ -141,6 +141,7 @@ document.getElementById("show-liked-songs").addEventListener("click", () => {
             document.getElementById("liked-songs-list").innerHTML = `<p>Error loading liked songs: ${error.message}</p>`;
         });
 });
+
 function getTopTracks() {
     fetch("/top-tracks")
         .then(response => response.json())
@@ -148,14 +149,14 @@ function getTopTracks() {
             const tracks = data.items;
             const topTracksList = document.getElementById("top-tracks-list");
             topTracksList.innerHTML = "";
-            
+
             if (Array.isArray(tracks)) {
                 tracks.forEach(track => {
                     const trackItem = document.createElement("div");
                     trackItem.className = "music-item";
                     const imageUrl = (track.album && track.album.images && track.album.images.length > 0)
-                                     ? track.album.images[0].url
-                                     : "https://via.placeholder.com/150";
+                        ? track.album.images[0].url
+                        : "https://via.placeholder.com/150";
                     trackItem.innerHTML = `
                         <div class="cover" style="background-image: url('${imageUrl}');"></div>
                         <div class="track-info">
@@ -203,14 +204,14 @@ function getTopArtists() {
             const artists = data.items;
             const topArtistsList = document.getElementById("top-artists-list");
             topArtistsList.innerHTML = "";
-            
+
             if (Array.isArray(artists)) {
                 artists.forEach(artist => {
                     const artistItem = document.createElement("div");
                     artistItem.className = "music-item";
                     const imageUrl = (artist.images && artist.images.length > 0)
-                                     ? artist.images[0].url
-                                     : "https://via.placeholder.com/150";
+                        ? artist.images[0].url
+                        : "https://via.placeholder.com/150";
                     artistItem.innerHTML = `
                         <div class="cover" style="background-image: url('${imageUrl}');"></div>
                         <div class="artist-info">
@@ -227,6 +228,7 @@ function getTopArtists() {
             document.getElementById("top-artists-list").innerHTML = `<p>Error loading top artists: ${error.message}</p>`;
         });
 }
+
 document.addEventListener("DOMContentLoaded", () => {
     getTopArtists();
 });
@@ -242,7 +244,7 @@ function getTopGenre() {
                 genresList.innerHTML = `<p>${data.message}</p>`;
                 return;
             }
-            
+
             if (Array.isArray(data)) {
                 data.forEach(genre => {
                     const genreItem = document.createElement("div");

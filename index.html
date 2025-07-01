@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Music Recommendation System</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
+    <meta charset="UTF-8"/>
+    <title>Music Recommendation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
 </head>
 <body>
 
-  <div class="container">
+<div class="container">
     <div class="neumorphic-panel">
-      <h1>MUSIC RECOMMENDATION SYSTEM</h1>
-      <div class="spotify-logo"><img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo"></div>
-      <p class="tagline">Discover new music tailored to your taste</p>
-      <button class="btn"><a href="/authorization">Get Recommendations</a></button>
+        <h1>MUSIC RECOMMENDATION SYSTEM</h1>
+        <div class="spotify-logo"><img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo"></div>
+        <p class="tagline">Discover new music tailored to your taste</p>
+        <button class="btn"><a href="/authorization">Get Recommendations</a></button>
     </div>
-  </div>
+</div>
 
 <div id="chatbot-container">
     <button id="open-chatbot" class="chatbot-round-btn" aria-label="Open chat">
@@ -26,7 +26,9 @@
             <div class="chatbot-message chatbot-message-bot">
                 <img class="chatbot-avatar" src="{{ url_for('static', filename='bot_avatar.png') }}" alt="Bot">
                 <div class="chatbot-bubble">
-                    <div class="chatbot-nickname">Bot</div> 👋 Welcome! If you have any questions about your music recommendations or using this app, just ask me here.
+                    <div class="chatbot-nickname">Bot</div>
+                    👋 Welcome! If you have any questions about your music recommendations or using this app, just ask me
+                    here.
                 </div>
             </div>
         </div>
