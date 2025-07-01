@@ -8,8 +8,7 @@ from datetime import timedelta
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
-
-
+import re
 
 load_dotenv() 
 
@@ -49,21 +48,21 @@ class SpotifyFlaskApp:
             max_retries=2,
             openai_api_key=os.getenv("OPENAI_API_KEY")
         )
-        # Make the system prompt specific to your app:
         prompt = ChatPromptTemplate.from_messages([
-            ("system",
-            "You are a helpful assistant for a Spotify music recommendation web app. "
-            "Answer ONLY about features available in this app. "
-            "The user can: view their top tracks, top artists, top genres, playlists, liked songs, "
-            "and get recommendations based on their playlists or liked songs. "
-            "If the user asks how to get recommendations, explain how to use the app's buttons and features. "
-            "Do NOT give generic internet advice or mention other services."),
-            ("user", "{input}")
+        ("system",
+        "You are a helpful assistant for a Spotify music recommendation web app. "
+        "Answer ONLY about features available in this app. "
+        "The user can: view their top tracks, top artists, top genres, playlists, liked songs, "
+        "and get recommendations based on their playlists or liked songs. "
+        "If the user asks how to get recommendations, explain how to use the app's buttons and features. "
+        "Do NOT give generic internet advice or mention other services."),
+        ("user", "{input}")
         ])
         chain = prompt | llm
 
         response = chain.invoke({"input": user_message})
-        return jsonify({"response": response.content})
+        clean_text = re.sub(r'(\*\*|__|\*|`)', '', response.content)
+        return jsonify({"response": clean_text})
     
     def register_routes(self):
         self.app.route('/', endpoint='home')(self.home)

@@ -15,7 +15,7 @@ class AudioProcessor:
         self.output_path = output_path
         os.makedirs(self.output_path, exist_ok=True)
     
-    def search_and_download(self, track_name, artist):
+    def extract(self, track_name, artist):
 
         query = f"{track_name} {artist} official audio"
         ydl_opts = {
@@ -61,7 +61,7 @@ class AudioProcessor:
         artist = row['name_artist']
         print(f"Processing: {track_name} by {artist}")
         try:
-            audio_file = self.search_and_download(track_name, artist)
+            audio_file = self.extract(track_name, artist)
             print(f"Downloaded: {audio_file}")
             features = self.extract_audio_features(audio_file)
             features['track_id'] = row['id_tracks']
@@ -81,7 +81,7 @@ class AudioProcessor:
         extraction_tasks = []
 
         with ThreadPoolExecutor(max_workers=4) as download_executor:
-            download_futures = {download_executor.submit(self.search_and_download, row['name_tracks'], row['name_artist']): row 
+            download_futures = {download_executor.submit(self.extract, row['name_tracks'], row['name_artist']): row 
                                 for idx, row in df.iterrows()}
             for future in download_futures:
                 row = download_futures[future]
@@ -175,7 +175,7 @@ class AudioProcessor:
             features_list = [feat for feat in features_list if feat is not None]
             if features_list:
                 features_df = pd.DataFrame(features_list)
-                dataset_df = dataset_processor.adding_features_to_set(features_df)
+                dataset_df = dataset_processor.add_features_to_set(features_df)
             else:
                 print("No features could be extracted for missing songs.")
         
@@ -222,7 +222,7 @@ class DatasetProcessor:
     def __init__(self, dataset_path='static/general_dataset.csv'):
         self.dataset_path = dataset_path
 
-    def adding_features_to_set(self, df):
+    def add_features_to_set(self, df):
 
         try:
             general_dataset = pd.read_csv(self.dataset_path)
