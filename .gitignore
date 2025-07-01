@@ -3,3 +3,6 @@ eslint.config.mjs
 package-lock.json
 package.json
 /.env
+/.idea
+/.pytest_cache
+/__pycache__
