@@ -2,4 +2,4 @@
 eslint.config.mjs
 package-lock.json
 package.json
-.env
+/.env
